@@ -1,8 +1,10 @@
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import { useSuperHeroesData } from '../hooks/useSuperHeroesData';
 
-const fetchSuperHeroes = () => {
-  return axios.get('http://localhost:4000/superheroes');
+const onSuccess = (data) => {
+  console.log('Success side effect !', data);
+};
+const onError = (error) => {
+  console.log('Error side effect !', error);
 };
 export const RQSuperHeroesPage = () => {
   const {
@@ -12,14 +14,7 @@ export const RQSuperHeroesPage = () => {
     error,
     isFetching,
     refetch,
-  } = useQuery('super-heroes', fetchSuperHeroes, {
-    // staleTime: 30000,
-    // refetchOnMount: true,
-    // refetchOnWindowFocus: true,
-    // refetchInterval: 2000,
-    // refetchIntervalInBackground: true,
-    enabled: false,
-  });
+  } = useSuperHeroesData(onSuccess, onError);
   console.log({ isLoading, isFetching });
   if (isLoading || isFetching) return <h2>Is loading</h2>;
   if (isError) return <h2>{error.message}</h2>;
